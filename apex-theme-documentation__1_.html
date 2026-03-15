@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apex Packaging — Shopify Theme Documentation</title>
+<style>
+  :root {
+    --fg: #0a0a0a;
+    --muted: #666;
+    --light: #999;
+    --border: rgba(0,0,0,0.09);
+    --offwhite: #f7f5f2;
+    --accent: #2d5a27;
+    --warn: #b45309;
+    --danger: #c0392b;
+    --code-bg: #1e1e2e;
+    --code-fg: #cdd6f4;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--fg);
+    background: #fff;
+  }
+
+  /* ---- Layout ---- */
+  .layout { display: flex; min-height: 100vh; }
+
+  /* ---- Sidebar ---- */
+  .sidebar {
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    width: 260px;
+    background: var(--offwhite);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    padding: 32px 0 40px;
+    z-index: 100;
+    flex-shrink: 0;
+  }
+  .sidebar-logo {
+    padding: 0 24px 24px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 20px;
+  }
+  .sidebar-logo h1 {
+    font-family: Georgia, serif;
+    font-size: 18px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+  .sidebar-logo p { font-size: 11px; color: var(--light); margin-top: 3px; }
+  .sidebar-section { margin-bottom: 6px; }
+  .sidebar-section-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--light);
+    padding: 10px 24px 4px;
+  }
+  .sidebar a {
+    display: block;
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 6px 24px;
+    border-left: 2px solid transparent;
+    transition: color 0.15s, background 0.15s, border-color 0.15s;
+  }
+  .sidebar a:hover { color: var(--fg); background: rgba(0,0,0,0.04); }
+  .sidebar a.active { color: var(--fg); border-left-color: var(--fg); font-weight: 500; background: rgba(0,0,0,0.04); }
+
+  /* ---- Main ---- */
+  .main {
+    margin-left: 260px;
+    padding: 60px 72px 120px;
+    width: calc(100% - 260px);
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  /* ---- Cover ---- */
+  .cover {
+    background: var(--fg);
+    color: #fff;
+    border-radius: 20px;
+    padding: 56px 52px;
+    margin-bottom: 72px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+  }
+  .cover-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .cover h1 {
+    font-family: Georgia, serif;
+    font-size: 48px;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+  .cover p { font-size: 16px; opacity: 0.7; max-width: 480px; line-height: 1.6; }
+  .cover-meta {
+    display: flex;
+    gap: 32px;
+    margin-top: 36px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+  }
+  .cover-meta-item { }
+  .cover-meta-item .label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.5; margin-bottom: 4px; }
+  .cover-meta-item .value { font-size: 14px; font-weight: 500; }
+
+  /* ---- Section ---- */
+  .doc-section {
+    padding-top: 56px;
+    margin-bottom: 56px;
+    border-top: 1px solid var(--border);
+  }
+  .doc-section:first-of-type { border-top: none; padding-top: 0; }
+
+  h2.section-title {
+    font-family: Georgia, serif;
+    font-size: 28px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: var(--fg);
+    margin-bottom: 6px;
+  }
+  .section-subtitle {
+    font-size: 13px;
+    color: var(--light);
+    margin-bottom: 32px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+    display: block;
+    width: 100%;
+  }
+
+  h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--fg);
+    margin: 32px 0 12px;
+  }
+  h4 {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--light);
+    margin: 24px 0 8px;
+  }
+  p { margin-bottom: 14px; color: var(--muted); }
+  p:last-child { margin-bottom: 0; }
+  strong { color: var(--fg); font-weight: 600; }
+  a { color: var(--fg); }
+
+  /* ---- Steps ---- */
+  .steps { display: flex; flex-direction: column; gap: 0; margin: 20px 0; }
+  .step {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: 16px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: start;
+  }
+  .step:last-child { border-bottom: none; }
+  .step-num {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--fg);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .step-content h4 { margin: 0 0 6px; text-transform: none; letter-spacing: 0; font-size: 14px; color: var(--fg); }
+  .step-content p { margin: 0; font-size: 13.5px; }
+
+  /* ---- Code ---- */
+  pre {
+    background: var(--code-bg);
+    color: var(--code-fg);
+    border-radius: 10px;
+    padding: 20px 22px;
+    font-size: 12.5px;
+    line-height: 1.65;
+    overflow-x: auto;
+    margin: 12px 0 20px;
+    font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+  }
+  code {
+    background: rgba(0,0,0,0.06);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12.5px;
+    font-family: 'Fira Code', monospace;
+    color: var(--fg);
+  }
+  pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
+
+  /* ---- Callouts ---- */
+  .callout {
+    display: flex;
+    gap: 14px;
+    padding: 16px 18px;
+    border-radius: 10px;
+    margin: 16px 0;
+    font-size: 13.5px;
+    line-height: 1.6;
+  }
+  .callout p { margin: 0; }
+  .callout-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .callout-tip { background: rgba(45,90,39,0.07); border: 1px solid rgba(45,90,39,0.18); color: #1a4017; }
+  .callout-warn { background: rgba(180,83,9,0.07); border: 1px solid rgba(180,83,9,0.18); color: #7c3a05; }
+  .callout-info { background: rgba(10,10,10,0.05); border: 1px solid var(--border); color: var(--muted); }
+  .callout-danger { background: rgba(192,57,43,0.07); border: 1px solid rgba(192,57,43,0.18); color: #7a1f15; }
+
+  /* ---- Tables ---- */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    margin: 16px 0 24px;
+  }
+  th {
+    text-align: left;
+    padding: 10px 14px;
+    background: var(--offwhite);
+    font-weight: 600;
+    color: var(--fg);
+    border-bottom: 2px solid var(--border);
+    font-size: 12px;
+    letter-spacing: 0.03em;
+  }
+  td {
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  td code { font-size: 11.5px; }
+
+  /* ---- File tree ---- */
+  .file-tree {
+    background: var(--offwhite);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 22px;
+    font-family: monospace;
+    font-size: 13px;
+    line-height: 1.9;
+    margin: 12px 0 20px;
+  }
+  .file-tree .dir { color: var(--fg); font-weight: 600; }
+  .file-tree .file { color: var(--muted); }
+  .file-tree .comment { color: var(--light); font-size: 12px; }
+  .file-tree .indent1 { padding-left: 20px; }
+  .file-tree .indent2 { padding-left: 40px; }
+  .file-tree .indent3 { padding-left: 60px; }
+
+  /* ---- Badge ---- */
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .badge-required { background: rgba(192,57,43,0.1); color: var(--danger); }
+  .badge-optional { background: rgba(0,0,0,0.06); color: var(--light); }
+  .badge-new { background: rgba(45,90,39,0.1); color: var(--accent); }
+
+  /* ---- Setting row ---- */
+  .setting-list { display: flex; flex-direction: column; gap: 0; margin: 12px 0; }
+  .setting-row {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13.5px;
+  }
+  .setting-row:last-child { border-bottom: none; }
+  .setting-key { font-family: monospace; font-size: 12.5px; color: var(--fg); font-weight: 500; }
+  .setting-desc { color: var(--muted); }
+
+  /* ---- TOC ---- */
+  .toc { background: var(--offwhite); border-radius: 12px; padding: 24px 28px; margin-bottom: 48px; }
+  .toc h3 { margin: 0 0 14px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--light); }
+  .toc ol { padding-left: 18px; }
+  .toc li { margin-bottom: 6px; }
+  .toc a { font-size: 14px; color: var(--muted); text-decoration: none; }
+  .toc a:hover { color: var(--fg); }
+
+  /* ---- Print / PDF ---- */
+  @media print {
+    .sidebar { display: none !important; }
+    .layout { display: block !important; }
+    .main {
+      margin-left: 0 !important;
+      width: 100% !important;
+      padding: 32px 48px !important;
+      box-sizing: border-box !important;
+    }
+    .cover { border-radius: 12px; }
+    pre { white-space: pre-wrap; font-size: 11px; }
+    .doc-section { page-break-inside: avoid; }
+    h2.section-title { page-break-after: avoid; }
+    table { page-break-inside: avoid; }
+    .steps { page-break-inside: avoid; }
+  }
+
+  /* Force full width even in iframe/embed */
+  html, body { width: 100%; }
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Apex Packaging</h1>
+    <p>Theme Documentation v1.0</p>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-label">Getting Started</div>
+    <a href="#overview">Overview</a>
+    <a href="#installation">Installation</a>
+    <a href="#file-structure">File Structure</a>
+    <a href="#css-variables">CSS Variables</a>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-label">Pages & Templates</div>
+    <a href="#home">Home Page</a>
+    <a href="#collection">Collection Page</a>
+    <a href="#product">Product Page</a>
+    <a href="#cart">Cart Page</a>
+    <a href="#account">Account Dashboard</a>
+    <a href="#contact">Contact Page</a>
+    <a href="#privacy">Privacy Policy Page</a>
+    <a href="#wishlist">Wishlist Page</a>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-label">Sections</div>
+    <a href="#header">Header & Navigation</a>
+    <a href="#footer">Footer</a>
+    <a href="#hero">Home Hero</a>
+    <a href="#cta">CTA Banner</a>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-label">Features</div>
+    <a href="#metafields">Product Metafields</a>
+    <a href="#filters">Collection Filters</a>
+    <a href="#wishlist-system">Wishlist System</a>
+    <a href="#mega-menu">Mega Menu</a>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-label">Reference</div>
+    <a href="#required-pages">Required Pages</a>
+    <a href="#tag-format">Product Tag Format</a>
+    <a href="#changelog">Changelog</a>
+  </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="cover-badge">Shopify Theme</div>
+    <h1>Apex Packaging</h1>
+    <p>A premium, editorial Shopify theme built for packaging and B2B product businesses. Clean, minimal, and fully customisable from the Theme Customizer.</p>
+    <div class="cover-meta">
+      <div class="cover-meta-item">
+        <div class="label">Version</div>
+        <div class="value">1.0.0</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="label">Shopify Version</div>
+        <div class="value">Dawn-compatible / OS 2.0</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="label">Last Updated</div>
+        <div class="value">March 2026</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="label">Support</div>
+        <div class="value">Included</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc">
+    <h3>Table of Contents</h3>
+    <ol>
+      <li><a href="#overview">Overview & Features</a></li>
+      <li><a href="#installation">Installation</a></li>
+      <li><a href="#file-structure">File Structure</a></li>
+      <li><a href="#css-variables">CSS Variables & Theming</a></li>
+      <li><a href="#header">Header & Navigation Setup</a></li>
+      <li><a href="#home">Home Page</a></li>
+      <li><a href="#collection">Collection Page & Filters</a></li>
+      <li><a href="#product">Product Page & Metafields</a></li>
+      <li><a href="#cart">Cart Page</a></li>
+      <li><a href="#account">Account Dashboard</a></li>
+      <li><a href="#contact">Contact Page</a></li>
+      <li><a href="#privacy">Privacy Policy Page</a></li>
+      <li><a href="#wishlist">Wishlist System</a></li>
+      <li><a href="#required-pages">Required Pages Checklist</a></li>
+      <li><a href="#tag-format">Product Tag Format</a></li>
+      <li><a href="#changelog">Changelog</a></li>
+    </ol>
+  </div>
+
+  <!-- ===== OVERVIEW ===== -->
+  <section class="doc-section" id="overview">
+    <h2 class="section-title">Overview & Features</h2>
+    <p class="section-subtitle">What's included in the Apex Packaging theme</p>
+
+    <p>Apex Packaging is a modern Shopify OS 2.0 theme designed specifically for packaging, B2B product, and food service businesses. It draws inspiration from editorial design with clean typography, smooth animations, and a fully responsive layout.</p>
+
+    <h3>Key Features</h3>
+    <table>
+      <thead><tr><th>Feature</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Mega Menu</strong></td><td>Full-width dropdown with auto-pulling collection images, drag-to-scroll, and stagger animations</td></tr>
+        <tr><td><strong>Collection Page</strong></td><td>Sidebar filters, search, sort, active pills, category tabs, inline delivery & rewards banners, load more</td></tr>
+        <tr><td><strong>Product Page</strong></td><td>Sticky gallery, thumbnail switcher, variant pills, AJAX add to cart, accordion info sections, metafield support, related products</td></tr>
+        <tr><td><strong>Wishlist System</strong></td><td>localStorage-based wishlist with heart buttons on all cards, badge counter in header, dedicated wishlist page</td></tr>
+        <tr><td><strong>Account Dashboard</strong></td><td>3-tab dashboard: Orders, Addresses, Account Details. Works with Shopify New Customer Accounts</td></tr>
+        <tr><td><strong>Cart Page</strong></td><td>AJAX quantity updates, remove with animation, coupon field, live totals, rewards banner</td></tr>
+        <tr><td><strong>Contact Page</strong></td><td>Industry type & needs pill selectors, contact info cards, Google Maps embed support, FAQ accordion</td></tr>
+        <tr><td><strong>Privacy Policy Page</strong></td><td>Sticky sidebar navigation, tab switcher (Privacy / PAIA), scroll spy, mobile collapsible TOC, fully dynamic blocks</td></tr>
+        <tr><td><strong>Parallax Footer</strong></td><td>Fixed-position footer that reveals as the page scrolls past</td></tr>
+        <tr><td><strong>OS 2.0 Compatible</strong></td><td>All sections use JSON templates and Shopify block system for Theme Customizer editing</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Browser Support</h3>
+    <p>Chrome 90+, Firefox 88+, Safari 14+, Edge 90+. Mobile: iOS Safari 14+, Android Chrome 90+.</p>
+  </section>
+
+  <!-- ===== INSTALLATION ===== -->
+  <section class="doc-section" id="installation">
+    <h2 class="section-title">Installation</h2>
+    <p class="section-subtitle">How to install the theme on your Shopify store</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h4>Upload the theme</h4>
+          <p>In your Shopify Admin, go to <strong>Online Store → Themes → Add theme → Upload zip file</strong>. Select the <code>apex-packaging-shopify-theme.zip</code> file.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h4>Preview before publishing</h4>
+          <p>Click <strong>Preview</strong> on the uploaded theme to check everything looks correct before going live.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h4>Create required pages</h4>
+          <p>Go to <strong>Online Store → Pages</strong> and create the following pages. See the <a href="#required-pages">Required Pages</a> section for full details.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h4>Set up metafields</h4>
+          <p>Go to <strong>Admin → Settings → Custom data → Products</strong> and create the product metafields. See the <a href="#metafields">Metafields</a> section for the full list.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <h4>Configure in Theme Customizer</h4>
+          <p>Go to <strong>Online Store → Themes → Customize</strong>. Fill in your logo, navigation, contact details, and section content.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">6</div>
+        <div class="step-content">
+          <h4>Publish</h4>
+          <p>Once everything is configured, click <strong>Publish</strong> on the theme to make it live.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-warn">
+      <span class="callout-icon">⚠️</span>
+      <p>This theme uses <strong>Shopify New Customer Accounts</strong>. Do not enable Legacy Customer Accounts or the account dashboard will not function correctly.</p>
+    </div>
+  </section>
+
+  <!-- ===== FILE STRUCTURE ===== -->
+  <section class="doc-section" id="file-structure">
+    <h2 class="section-title">File Structure</h2>
+    <p class="section-subtitle">How the theme is organised</p>
+
+    <div class="file-tree">
+      <div class="dir">apex-packaging/</div>
+      <div class="indent1 dir">assets/</div>
+      <div class="indent2 file">apex.css <span class="comment">— all theme styles</span></div>
+      <div class="indent2 file">apex.js <span class="comment">— all theme JavaScript including wishlist</span></div>
+      <div class="indent1 dir">layout/</div>
+      <div class="indent2 file">theme.liquid <span class="comment">— main layout with parallax footer setup</span></div>
+      <div class="indent1 dir">sections/</div>
+      <div class="indent2 file">header.liquid <span class="comment">— nav, mega menu, mobile drawer</span></div>
+      <div class="indent2 file">footer.liquid <span class="comment">— parallax footer</span></div>
+      <div class="indent2 file">home-hero.liquid <span class="comment">— homepage hero banner</span></div>
+      <div class="indent2 file">home-cta.liquid <span class="comment">— CTA banner (reused on product & collection)</span></div>
+      <div class="indent2 file">collection-main.liquid <span class="comment">— collection page with filters</span></div>
+      <div class="indent2 file">product-main.liquid <span class="comment">— product detail page</span></div>
+      <div class="indent2 file">cart-main.liquid <span class="comment">— cart page</span></div>
+      <div class="indent2 file">account-main.liquid <span class="comment">— customer account dashboard</span></div>
+      <div class="indent2 file">contact-main.liquid <span class="comment">— contact page with form & FAQ</span></div>
+      <div class="indent2 file">privacy-page.liquid <span class="comment">— privacy policy with dynamic blocks</span></div>
+      <div class="indent2 file">wishlist-page.liquid <span class="comment">— wishlist page</span></div>
+      <div class="indent1 dir">templates/</div>
+      <div class="indent2 file">index.json <span class="comment">— homepage</span></div>
+      <div class="indent2 file">collection.json <span class="comment">— collection pages</span></div>
+      <div class="indent2 file">product.json <span class="comment">— product pages</span></div>
+      <div class="indent2 file">cart.json <span class="comment">— cart page</span></div>
+      <div class="indent2 file">page.contact.liquid <span class="comment">— contact page template</span></div>
+      <div class="indent2 file">page.privacy.liquid <span class="comment">— privacy policy template</span></div>
+      <div class="indent2 file">page.wishlist.liquid <span class="comment">— wishlist page template</span></div>
+      <div class="indent2 dir">customers/</div>
+      <div class="indent3 file">account.json <span class="comment">— account dashboard</span></div>
+    </div>
+  </section>
+
+  <!-- ===== CSS VARIABLES ===== -->
+  <section class="doc-section" id="css-variables">
+    <h2 class="section-title">CSS Variables & Theming</h2>
+    <p class="section-subtitle">How to change the theme colours and typography</p>
+
+    <p>The theme uses CSS custom properties (variables) for all colours. You can override them in <code>assets/apex.css</code> at the top of the file under <code>:root</code>.</p>
+
+    <pre><code>:root {
+  --c-bg:       #ffffff;   /* page background */
+  --c-fg:       #0a0a0a;   /* primary text & dark elements */
+  --c-muted:    #666666;   /* secondary text */
+  --c-offwhite: #f7f5f2;   /* card backgrounds, subtle fills */
+  --c-accent:   #2d5a27;   /* green accent (logo SVG) */
+}</code></pre>
+
+    <h3>Typography</h3>
+    <p>The theme uses two fonts loaded via Google Fonts in <code>layout/theme.liquid</code>:</p>
+    <table>
+      <thead><tr><th>Font</th><th>Usage</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Cormorant Garamond</strong></td><td>All headings — h1, h2, section titles, hero text</td></tr>
+        <tr><td><strong>System UI / -apple-system</strong></td><td>Body text, labels, UI elements</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-tip">
+      <span class="callout-icon">💡</span>
+      <p>To change the heading font, find all instances of <code>'Cormorant Garamond', Georgia, serif</code> in <code>apex.css</code> and replace with your preferred font. Make sure to update the Google Fonts link in <code>layout/theme.liquid</code> too.</p>
+    </div>
+  </section>
+
+  <!-- ===== HEADER ===== -->
+  <section class="doc-section" id="header">
+    <h2 class="section-title">Header & Navigation</h2>
+    <p class="section-subtitle">Setting up the navigation, mega menu, and header icons</p>
+
+    <h3>Schema Settings</h3>
+    <div class="setting-list">
+      <div class="setting-row"><div class="setting-key">menu</div><div class="setting-desc">Link list handle for the main navigation. Default: <code>main-menu</code></div></div>
+      <div class="setting-row"><div class="setting-key">logo_sub</div><div class="setting-desc">Second line of text displayed below the logo/shop name</div></div>
+      <div class="setting-row"><div class="setting-key">credit_lbl</div><div class="setting-desc">Label for the credit application link in the header (e.g. "Credit Application")</div></div>
+      <div class="setting-row"><div class="setting-key">credit_url</div><div class="setting-desc">URL for the credit application link</div></div>
+      <div class="setting-row"><div class="setting-key">show_account</div><div class="setting-desc">Toggle to show/hide the account icon in the header</div></div>
+      <div class="setting-row"><div class="setting-key">dd_img_1–3</div><div class="setting-desc">Images for mega menu dropdown cards 1, 2, and 3</div></div>
+      <div class="setting-row"><div class="setting-key">dd_product_img</div><div class="setting-desc">Product image for the 4th (text) card in the mega menu</div></div>
+      <div class="setting-row"><div class="setting-key">dd_sub</div><div class="setting-desc">Heading for the 4th card. Default: "Looking for something specific?"</div></div>
+      <div class="setting-row"><div class="setting-key">dd_desc</div><div class="setting-desc">Description text for the 4th card</div></div>
+    </div>
+
+    <h3>Mega Menu Setup</h3>
+    <p>The mega menu activates automatically for any top-level navigation item that has <strong>child links</strong>. The cards inside the dropdown are populated from those child links.</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h4>Create a navigation menu in Admin</h4>
+          <p>Go to <strong>Online Store → Navigation → Main menu</strong>. Add top-level items. For items that should have a mega menu dropdown, add child links under them.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h4>Upload dropdown images</h4>
+          <p>In <strong>Theme Customizer → Header → Mega Menu Images</strong>, upload images for cards 1, 2, and 3. If no image is uploaded for a card, it will fall back to the collection image automatically.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h4>Set collection images (auto-fallback)</h4>
+          <p>If a dropdown card links to a collection URL (e.g. <code>/collections/food-service</code>), the theme will automatically use that collection's image if no manual image is set in step 2.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>Wishlist Icon</h3>
+    <p>The wishlist heart icon is built into the header automatically. It shows a red badge counter that updates when items are added. It links to <code>/pages/wishlist</code>.</p>
+
+    <h3>Mobile Menu</h3>
+    <p>On mobile, the navigation collapses into a slide-in drawer from the left. Navigation items with child links show an accordion that expands on tap. Parent items with children are <strong>not clickable</strong> — only their children are.</p>
+  </section>
+
+  <!-- ===== HOME ===== -->
+  <section class="doc-section" id="home">
+    <h2 class="section-title">Home Page</h2>
+    <p class="section-subtitle">Configuring the homepage sections</p>
+
+    <p>The homepage uses <code>templates/index.json</code> and is fully editable in Theme Customizer. It includes the Hero section and CTA banner by default.</p>
+
+    <h3>Hero Section (<code>sections/home-hero.liquid</code>)</h3>
+    <div class="setting-list">
+      <div class="setting-row"><div class="setting-key">bg_image</div><div class="setting-desc">Main hero background image (desktop)</div></div>
+      <div class="setting-row"><div class="setting-key">mob_image</div><div class="setting-desc">Optional separate image for mobile. If not set, desktop image is used</div></div>
+      <div class="setting-row"><div class="setting-key">heading</div><div class="setting-desc">Main hero heading text</div></div>
+      <div class="setting-row"><div class="setting-key">subtext</div><div class="setting-desc">Subtitle or description below the heading</div></div>
+      <div class="setting-row"><div class="setting-key">cta_label</div><div class="setting-desc">Call to action button text</div></div>
+      <div class="setting-row"><div class="setting-key">cta_url</div><div class="setting-desc">Call to action button link</div></div>
+    </div>
+
+    <h3>CTA Banner (<code>sections/home-cta.liquid</code>)</h3>
+    <p>This section also appears at the bottom of Collection and Product pages. Configure it once in Theme Customizer and it applies everywhere it's used.</p>
+  </section>
+
+  <!-- ===== COLLECTION ===== -->
+  <section class="doc-section" id="collection">
+    <h2 class="section-title">Collection Page</h2>
+    <p class="section-subtitle">Filters, tabs, search and product grid configuration</p>
+
+    <h3>Schema Settings</h3>
+    <div class="setting-list">
+      <div class="setting-row"><div class="setting-key">products_per_page</div><div class="setting-desc">How many products to show per load-more batch. Default: 12</div></div>
+      <div class="setting-row"><div class="setting-key">show_vendor</div><div class="setting-desc">Show/hide the Brand filter in the sidebar</div></div>
+      <div class="setting-row"><div class="setting-key">show_cta</div><div class="setting-desc">Show/hide the CTA banner below the product grid</div></div>
+      <div class="setting-row"><div class="setting-key">show_tabs</div><div class="setting-desc">Show/hide the category tabs bar above the grid</div></div>
+      <div class="setting-row"><div class="setting-key">tab_links</div><div class="setting-desc">Category tabs — one per line in format: <code>Label | /url | count</code></div></div>
+      <div class="setting-row"><div class="setting-key">show_delivery_banner</div><div class="setting-desc">Show the delivery info card inline in the product grid (appears at position 7)</div></div>
+      <div class="setting-row"><div class="setting-key">show_rewards_banner</div><div class="setting-desc">Show the rewards promo card inline in the product grid (appears at position 13)</div></div>
+    </div>
+
+    <h3>Category Tabs Setup</h3>
+    <p>In <strong>Theme Customizer → Collection Page → tab_links</strong>, enter one tab per line in this format:</p>
+    <pre><code>Food Service | /collections/food-service | 24
+Food Processing | /collections/food-processing | 18
+Agriculture | /collections/agriculture | 12</code></pre>
+
+    <div class="callout callout-info">
+      <span class="callout-icon">ℹ️</span>
+      <p>The count number after the second <code>|</code> is manually set. Update it when your product counts change.</p>
+    </div>
+
+    <h3>Filters</h3>
+    <p>The sidebar filters are built <strong>automatically</strong> from your product data — no configuration needed. The theme reads:</p>
+    <table>
+      <thead><tr><th>Filter Type</th><th>Source</th></tr></thead>
+      <tbody>
+        <tr><td>Categories</td><td>Product Type field on each product</td></tr>
+        <tr><td>Brand</td><td>Product Vendor field (only shown if <code>show_vendor</code> is enabled)</td></tr>
+        <tr><td>Custom filters (Material, Size etc)</td><td>Product Tags in <code>key:value</code> format — see <a href="#tag-format">Tag Format</a></td></tr>
+        <tr><td>Price</td><td>Automatically generated min/max inputs</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ===== PRODUCT ===== -->
+  <section class="doc-section" id="product">
+    <h2 class="section-title">Product Page</h2>
+    <p class="section-subtitle">Gallery, variants, metafields and related products</p>
+
+    <h3>Schema Settings</h3>
+    <div class="setting-list">
+      <div class="setting-row"><div class="setting-key">show_related</div><div class="setting-desc">Show/hide the related products section at the bottom</div></div>
+      <div class="setting-row"><div class="setting-key">related_count</div><div class="setting-desc">Number of related products to show. Default: 4</div></div>
+      <div class="setting-row"><div class="setting-key">related_title</div><div class="setting-desc">Heading for the related products section. Default: "You might also like"</div></div>
+      <div class="setting-row"><div class="setting-key">delivery_note</div><div class="setting-desc">Delivery info text shown below the Add to Cart button</div></div>
+    </div>
+
+    <h3 id="metafields">Product Metafields</h3>
+    <p>The product page supports rich content via Shopify metafields. Each metafield appears as an expandable accordion section. Create these in <strong>Admin → Settings → Custom data → Products</strong>:</p>
+
+    <table>
+      <thead><tr><th>Namespace & Key</th><th>Type</th><th>Label</th></tr></thead>
+      <tbody>
+        <tr><td><code>custom.additional_information</code></td><td>Rich text</td><td>Additional Information</td></tr>
+        <tr><td><code>custom.details_dimensions</code></td><td>Rich text</td><td>Details & Dimensions</td></tr>
+        <tr><td><code>custom.storage</code></td><td>Rich text</td><td>Storage</td></tr>
+        <tr><td><code>custom.customisation</code></td><td>Rich text</td><td>Customisation</td></tr>
+        <tr><td><code>custom.pairing_products</code></td><td>List of products</td><td>Pairing Products</td></tr>
+        <tr><td><code>custom.pairing_text</code></td><td>Single-line text</td><td>Pairing Text</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-tip">
+      <span class="callout-icon">💡</span>
+      <p>Accordion sections only appear on the product page if the corresponding metafield has content. Empty metafields are hidden automatically.</p>
+    </div>
+
+    <h3>Related Products</h3>
+    <p>Related products are automatically pulled from the collection that matches the current product's <strong>Product Type</strong>. If no matching collection is found, it falls back to <code>collections/all</code>.</p>
+  </section>
+
+  <!-- ===== CART ===== -->
+  <section class="doc-section" id="cart">
+    <h2 class="section-title">Cart Page</h2>
+    <p class="section-subtitle">AJAX cart with live totals</p>
+
+    <p>The cart page uses AJAX for all interactions — no page reloads required.</p>
+    <ul style="padding-left:20px; color: var(--muted); font-size:14px; line-height:2;">
+      <li>Quantity updates immediately via <code>/cart/change.js</code></li>
+      <li>Items fade out and are removed via <code>/cart/change.js</code> with quantity 0</li>
+      <li>Subtotal, VAT, and Total update live after every change</li>
+      <li>Coupon code field included</li>
+      <li>Rewards banner configurable in Theme Customizer</li>
+    </ul>
+
+    <div class="callout callout-info">
+      <span class="callout-icon">ℹ️</span>
+      <p>VAT display is calculated at 15% for display purposes only. Shopify handles the actual tax calculation at checkout.</p>
+    </div>
+  </section>
+
+  <!-- ===== ACCOUNT ===== -->
+  <section class="doc-section" id="account">
+    <h2 class="section-title">Account Dashboard</h2>
+    <p class="section-subtitle">Customer account page with orders, addresses, and profile</p>
+
+    <p>The account dashboard lives at <code>templates/customers/account.json</code> and is only accessible to logged-in customers. Shopify automatically redirects logged-out visitors to the login page.</p>
+
+    <div class="callout callout-warn">
+      <span class="callout-icon">⚠️</span>
+      <p>This theme is built for <strong>New Customer Accounts</strong> (not Legacy). The login and signup pages are hosted by Shopify. You cannot and do not need to build custom login forms.</p>
+    </div>
+
+    <h3>Tabs</h3>
+    <table>
+      <thead><tr><th>Tab</th><th>Content</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Orders</strong></td><td>All past orders with line items, prices, fulfilment status badges, and a "View order details" link</td></tr>
+        <tr><td><strong>Addresses</strong></td><td>All saved addresses in a grid. Add new address form (toggle), edit and delete per address</td></tr>
+        <tr><td><strong>Account Details</strong></td><td>Edit name, email, phone number, and change password</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Header Account Icon</h3>
+    <p>Enable the account icon in <strong>Theme Customizer → Header → Show Account Icon</strong>. It links to <code>routes.account_url</code> — Shopify handles the redirect to login automatically if the customer is not logged in.</p>
+  </section>
+
+  <!-- ===== CONTACT ===== -->
+  <section class="doc-section" id="contact">
+    <h2 class="section-title">Contact Page</h2>
+    <p class="section-subtitle">Setting up the contact form, info cards, and FAQ</p>
+
+    <h3>Creating the Page</h3>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h4>Create a page in Admin</h4>
+          <p>Go to <strong>Online Store → Pages → Add page</strong>. Title it "Contact Us". Set the handle to <code>contact</code>.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h4>Set the template</h4>
+          <p>In the right sidebar under <strong>Theme template</strong>, select <strong>page.contact</strong>.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h4>Configure in Theme Customizer</h4>
+          <p>Navigate to the Contact page in Theme Customizer. Fill in your address, phone, email, and operating hours. Add FAQ blocks using <strong>Add block → FAQ Item</strong>.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>Schema Settings</h3>
+    <div class="setting-list">
+      <div class="setting-row"><div class="setting-key">hero_title</div><div class="setting-desc">Large heading at the top of the page. Default: "Let's Chat"</div></div>
+      <div class="setting-row"><div class="setting-key">hero_image</div><div class="setting-desc">Optional image shown to the right of the hero heading</div></div>
+      <div class="setting-row"><div class="setting-key">address</div><div class="setting-desc">Physical address shown in the contact info card</div></div>
+      <div class="setting-row"><div class="setting-key">phone</div><div class="setting-desc">Phone number — rendered as a clickable <code>tel:</code> link</div></div>
+      <div class="setting-row"><div class="setting-key">email</div><div class="setting-desc">Email address — rendered as a clickable <code>mailto:</code> link</div></div>
+      <div class="setting-row"><div class="setting-key">hours</div><div class="setting-desc">Operating hours — one line per entry, e.g. "Monday–Friday: 8am–5pm"</div></div>
+      <div class="setting-row"><div class="setting-key">map_embed</div><div class="setting-desc">Paste your Google Maps iframe embed code here</div></div>
+    </div>
+
+    <h3>FAQ Blocks</h3>
+    <p>Add as many FAQ items as you need via <strong>Add block → FAQ Item</strong> in Theme Customizer. Each block has a Question and Answer field. FAQs render as an accordion with smooth expand/collapse animation.</p>
+
+    <h3>Form Fields</h3>
+    <p>The contact form includes these fields by default: First Name, Last Name, Email, Phone, Company, Industry Type (pills), Needs (pills), and Message. All form submissions are sent to your Shopify store email via Shopify's built-in contact form handling.</p>
+  </section>
+
+  <!-- ===== PRIVACY ===== -->
+  <section class="doc-section" id="privacy">
+    <h2 class="section-title">Privacy Policy Page</h2>
+    <p class="section-subtitle">Dynamic policy sections with sidebar navigation</p>
+
+    <h3>Creating the Page</h3>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h4>Create a page in Admin</h4>
+          <p>Go to <strong>Online Store → Pages → Add page</strong>. Title it "Privacy Policy". Set the handle to <code>privacy-policy</code>.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h4>Set the template</h4>
+          <p>Under <strong>Theme template</strong>, select <strong>page.privacy</strong>.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h4>Add policy sections as blocks</h4>
+          <p>In Theme Customizer, navigate to the Privacy Policy page. Use <strong>Add block → Policy Section</strong> for each section. Each block has a <strong>Section heading</strong>, a short <strong>Sidebar nav label</strong>, and a <strong>rich text content</strong> field.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h4>Add PAIA sections (optional)</h4>
+          <p>Use <strong>Add block → PAIA Section</strong> for content in the PAIA Manual tab. Upload your PAIA PDF via the <strong>PAIA Manual PDF link</strong> setting.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>Features</h3>
+    <ul style="padding-left:20px; color:var(--muted); font-size:14px; line-height:2.2;">
+      <li>Sticky left sidebar with scroll spy — active link highlights as you scroll</li>
+      <li>Smooth scroll on nav link click</li>
+      <li>Tab switcher between Privacy Policy and PAIA Manual</li>
+      <li>On mobile: sidebar collapses into a tappable "On this page" accordion</li>
+      <li>Fully dynamic — add/remove/reorder sections via blocks</li>
+    </ul>
+  </section>
+
+  <!-- ===== WISHLIST ===== -->
+  <section class="doc-section" id="wishlist">
+    <h2 class="section-title">Wishlist System</h2>
+    <p class="section-subtitle">localStorage-based wishlist — no app required</p>
+
+    <h3>How It Works</h3>
+    <p>The wishlist is stored in the browser's <code>localStorage</code> under the key <code>apex_wishlist</code>. It stores product ID, title, price, URL, image, availability, and variant ID for each item.</p>
+
+    <div class="callout callout-warn">
+      <span class="callout-icon">⚠️</span>
+      <p>Because localStorage is browser-based, the wishlist is <strong>not synced across devices or accounts</strong>. It is cleared if the user clears their browser data. For cross-device sync, a third-party wishlist app would be needed.</p>
+    </div>
+
+    <h3>Creating the Wishlist Page</h3>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h4>Create a page in Admin</h4>
+          <p>Go to <strong>Online Store → Pages → Add page</strong>. Title it "Wishlist". Set the handle to <code>wishlist</code>.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h4>Set the template</h4>
+          <p>Under <strong>Theme template</strong>, select <strong>page.wishlist</strong>.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>Heart Buttons</h3>
+    <p>Heart (♥) buttons appear on all product cards on the Collection page and on the main product image on the Product page. Clicking toggles the item in/out of the wishlist. The heart fills red when the item is wishlisted.</p>
+
+    <h3>Header Badge</h3>
+    <p>A red badge counter appears on the wishlist icon in the header when items are in the wishlist. It updates in real time as items are added or removed.</p>
+
+    <h3>Wishlist Page Features</h3>
+    <ul style="padding-left:20px; color:var(--muted); font-size:14px; line-height:2.2;">
+      <li>Shows all wishlisted products in a 4-column grid</li>
+      <li>Each card has an ✕ remove button and an Add to Cart button</li>
+      <li>Add to Cart uses AJAX — updates the header cart badge</li>
+      <li>Loading skeleton shown while JavaScript hydrates the page</li>
+      <li>Empty state shown with a Browse Products link when wishlist is empty</li>
+    </ul>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <section class="doc-section" id="footer">
+    <h2 class="section-title">Footer</h2>
+    <p class="section-subtitle">Parallax footer configuration</p>
+
+    <p>The footer uses a parallax effect — it is fixed to the bottom of the viewport and revealed as the page scrolls over it. This is achieved via CSS with the footer at <code>position: fixed; z-index: 1</code> and the main content at <code>position: relative; z-index: 2</code> with <code>padding-bottom: 100vh</code>.</p>
+
+    <h3>Footer Logo</h3>
+    <p>The footer has a dedicated <strong>Footer Logo</strong> image picker in Theme Customizer (<strong>Footer → Footer Logo</strong>). It falls back to the global store logo if not set, and then falls back to the shop name as text.</p>
+
+    <h3>Setting Up Footer Links</h3>
+    <p>Footer navigation links are pulled from Shopify's navigation system. Create a link list in <strong>Online Store → Navigation</strong> and assign it in Theme Customizer under the Footer section settings.</p>
+  </section>
+
+  <!-- ===== REQUIRED PAGES ===== -->
+  <section class="doc-section" id="required-pages">
+    <h2 class="section-title">Required Pages Checklist</h2>
+    <p class="section-subtitle">Pages you must create in Shopify Admin for the theme to work fully</p>
+
+    <table>
+      <thead><tr><th>Page Title</th><th>Handle</th><th>Template</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Contact Us</strong></td><td><code>contact</code></td><td><code>page.contact</code></td><td>Fill settings in Theme Customizer</td></tr>
+        <tr><td><strong>Privacy Policy</strong></td><td><code>privacy-policy</code></td><td><code>page.privacy</code></td><td>Add content via blocks in Theme Customizer</td></tr>
+        <tr><td><strong>Wishlist</strong></td><td><code>wishlist</code></td><td><code>page.wishlist</code></td><td>No content needed — JS renders dynamically</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-tip">
+      <span class="callout-icon">💡</span>
+      <p>Shopify also automatically creates <strong>Terms of Service</strong> and <strong>Refund Policy</strong> pages. Go to <strong>Admin → Settings → Policies</strong> to generate them. These use the default <code>page</code> template.</p>
+    </div>
+  </section>
+
+  <!-- ===== TAG FORMAT ===== -->
+  <section class="doc-section" id="tag-format">
+    <h2 class="section-title">Product Tag Format</h2>
+    <p class="section-subtitle">How to tag products for collection filters</p>
+
+    <p>The collection page filter sidebar automatically reads product tags in <code>key:value</code> format and groups them into filter categories. Tags without a colon are ignored by the filter system.</p>
+
+    <h3>Format</h3>
+    <pre><code>material:Paper
+material:PET Plastic
+material:Bagasse
+size:500ml
+size:1L
+size:2L</code></pre>
+
+    <p>This would create two filter groups: <strong>Material</strong> (Paper, PET Plastic, Bagasse) and <strong>Size</strong> (500ml, 1L, 2L).</p>
+
+    <h3>Special Tags</h3>
+    <table>
+      <thead><tr><th>Tag</th><th>Effect</th></tr></thead>
+      <tbody>
+        <tr><td><code>new</code> or <code>New</code></td><td>Shows a "New" badge on the product card in the collection grid and product page</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-tip">
+      <span class="callout-icon">💡</span>
+      <p>Add tags to products in bulk via <strong>Admin → Products → select multiple → Add tags</strong>.</p>
+    </div>
+  </section>
+
+  <!-- ===== CHANGELOG ===== -->
+  <section class="doc-section" id="changelog">
+    <h2 class="section-title">Changelog</h2>
+    <p class="section-subtitle">Version history</p>
+
+    <h3>v1.0.0 — March 2026 <span class="badge badge-new">Initial Release</span></h3>
+    <ul style="padding-left:20px; color:var(--muted); font-size:14px; line-height:2.2; margin-top:12px;">
+      <li>Initial theme release</li>
+      <li>Header with mega menu, drag-to-scroll, mobile accordion drawer</li>
+      <li>Home hero section with mobile image support</li>
+      <li>Collection page with sidebar filters, category tabs, search, sort, inline banners</li>
+      <li>Product page with sticky gallery, variant pills, metafield accordions, AJAX cart</li>
+      <li>Cart page with AJAX quantity update and live totals</li>
+      <li>Account dashboard (Orders, Addresses, Account Details)</li>
+      <li>Contact page with form, pill selectors, info cards, Google Maps, FAQ accordion</li>
+      <li>Privacy Policy page with dynamic blocks, sticky sidebar nav, tab switcher</li>
+      <li>Wishlist system with localStorage, heart buttons, header badge, dedicated page</li>
+      <li>Parallax footer with dedicated logo setting</li>
+    </ul>
+  </section>
+
+</main>
+</div>
+
+<script>
+/* Sidebar scroll spy */
+var links = document.querySelectorAll('.sidebar a');
+var sections = document.querySelectorAll('.doc-section[id]');
+window.addEventListener('scroll', function(){
+  var scrollY = window.pageYOffset + 80;
+  var current = '';
+  sections.forEach(function(sec){
+    if(sec.offsetTop <= scrollY) current = sec.id;
+  });
+  links.forEach(function(link){
+    var href = link.getAttribute('href').replace('#','');
+    link.classList.toggle('active', href === current);
+  });
+}, { passive: true });
+</script>
+
+</body>
+</html>
